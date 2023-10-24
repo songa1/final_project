@@ -14,12 +14,23 @@ const char* ssid = "ICT_INNO_CENTER";
 const char* pass = "ictinnocenter@2021";
 
 String buff;
+int amountToRecharge = 100;
+
+String apiUrl = "http://localhost:3456";
+
+const int httpPort = 80;
+
+WiFiClient client;
 
 void setup() {
   Serial.begin(115200);
 
   // Connect to WiFi
-  connectToWiFi(ssid, pass);
+  WiFi.begin(ssid, pass);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
 
   // LCD Init
   lcd.begin(16, 2);
@@ -45,6 +56,22 @@ void setup() {
 }
 
 void loop() {
+  
+  if(!client.connect(apiUrl, httpPort)) {
+    Serial.println("Connection to Api failed!");
+    return;
+  }
+
+  client.println("GET /get-power HTTP/1.1");
+  client.println("Host: "+apiUrl);
+  client.println("Connection: close");
+  client.println();
+
+  while(client.available()) {
+    char terminator = '}';
+    String line = client.readStringUntil(terminator);
+    Serial.print(line);
+  }
   lcd.setCursor(0,0);
   lcd.print("Hi, Achille!");
   delay(1000);
@@ -69,14 +96,6 @@ void loop() {
     else
       sim800L.println(buff);
   }
-}
-
-void connectToWiFi(const char* ssid, const char* passphrase) {
-  Serial.println("STARTING CONNECTION TO WIFI");
-  WiFi.disconnect();
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, passphrase);
-  Serial.printf("\nDevice is connecting to WiFi using SSID %s and Passphrase %s.\n", ssid, passphrase);
 }
 
 void send_sms(){
