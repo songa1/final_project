@@ -34,11 +34,25 @@ export const addTransaction = async (req, res) => {
 
   res
     .status(201)
-    .send({ message: "Transaction added successfully!", data: transaction });
+    .send({ status: 201, message: "Transaction added successfully!", data: transaction });
 };
 
 export const getTransactions = async (req, res) => {
-  let transactions = await prisma.transaction.findMany();
+  let meterData = await prisma.meter.findUnique({
+    where: {
+      meterNumber: req.query.meter
+    }
+  })
+
+  let transactions = await prisma.transaction.findMany({
+    where: {
+      meterId: meterData.id
+    },
+    orderBy: {
+      id: "desc"
+    }
+  });
+
   res.status(200).send({
     message: "Transactions fetched successfully!",
     data: transactions,

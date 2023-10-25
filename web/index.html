@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Energy Meter</title>
+    <title>HomePage - Smart Energy Meter</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <h2>SMART ENERGY METER</h2>
-            <p>Meter No: 07888848484</p>
-        </nav>
-        <section class="current">
-            <div class="current-power">
-                <p><span class="reading">10.0</span> Kwh</p>
-            </div>
-            <div class="vc">
-                <p><span>Voltage:</span> 220V</p>
-                <p><span>Consumed:</span> 230Kwh</p>
-                <p><span>Current:</span> 1.2A</p>
-            </div>
-        </section>
+    <div class="home">
+        <div class="homepage">
+            <h1>SMART ENERGY METER</h1>
+            <p>Modern way to monitor your electricity usage and recharge electricity in case it is exhausted.</p>
+        </div>
+        <div class="login-page">
+            <h2>Login to the Dashboard</h2>
+            <label for="meter-username">Username/Meter Number</label>
+            <input type="text" name="meter-username" id="meter-username">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+            <button class="l-btn" id="login-btn">Login</button>
+        </div>
     </div>
+    <script src="./js/auth.js"></script>
 </body>
 </html>

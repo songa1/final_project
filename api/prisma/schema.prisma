@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Meter {
-  id          String        @id @unique @default(uuid())
+  id          Int           @id @unique @default(autoincrement())
   meterNumber String        @unique
+  password    String        @default("pass")
   power       Float         @default(0.0)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
@@ -23,7 +24,7 @@ model Transaction {
   id        Int      @id @unique @default(autoincrement())
   amount    Int
   power     Float
-  meterId   String
+  meterId   Int
   meter     Meter    @relation(fields: [meterId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

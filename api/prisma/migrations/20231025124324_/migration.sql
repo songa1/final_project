@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "Meter" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "meterNumber" TEXT NOT NULL,
-    "power" INTEGER NOT NULL DEFAULT 0,
+    "power" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -13,8 +13,8 @@ CREATE TABLE "Meter" (
 CREATE TABLE "Transaction" (
     "id" SERIAL NOT NULL,
     "amount" INTEGER NOT NULL,
-    "power" INTEGER NOT NULL,
-    "meterId" TEXT NOT NULL,
+    "power" DOUBLE PRECISION NOT NULL,
+    "meterId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -23,6 +23,9 @@ CREATE TABLE "Transaction" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Meter_id_key" ON "Meter"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Meter_meterNumber_key" ON "Meter"("meterNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Transaction_id_key" ON "Transaction"("id");

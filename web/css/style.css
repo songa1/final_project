@@ -29,6 +29,22 @@ nav h1 {
     padding: 0;
 }
 
+.right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.r-btn {
+    padding: 5px 20px;
+    border-radius: 5px;
+    border: 0;
+}
+
+.r-btn:active {
+    border: 2px solid #969090;
+}
+
 .current {
     display: flex;
     width: 100%;
@@ -45,15 +61,135 @@ nav h1 {
 }
 
 .vc {
-    width: 60%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border: 1px solid var(--bg-stroke);
     padding: 20px;
     border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+
+.vc-admin {
+    width: 80%;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--bg-stroke);
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}
+
+.vc-admin input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 span {
     font-weight: bold;
+}
+
+.transactions {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
+
+table,
+th,
+td,
+tr {
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+}
+
+form {
+    width: 100%;
+}
+
+form input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form label {
+    width: 100%;
+}
+
+#noData {
+    text-align: center;
+}
+
+.login-page {
+    background-color: aliceblue;
+    border-radius: 5px;
+    flex: 1;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+}
+
+.login-page input {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.home {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    height: 100vh;
+    justify-content: center;
+}
+
+.homepage {
+    flex: 1;
+    padding: 40px;
+    background-color: var(--main-blue);
+    height: 100%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+}
+
+.l-btn {
+    padding: 5px 20px;
+    border-radius: 5px;
+    border: 0;
+    background-color: var(--main-blue);
+    color: #fff;
+}
+
+.l-btn:active {
+    border: 2px solid var(--main-blue);
 }

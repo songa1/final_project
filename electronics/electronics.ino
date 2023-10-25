@@ -28,7 +28,6 @@ WiFiClient client;
 void setup() {
   Serial.begin(115200);
 
-  // Connect to WiFi
   WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -74,7 +73,7 @@ void loop() {
 }
 
 void getPower() {
-  String serverPath = "http://192.168.43.165:3456/get-power?meter=250791377446";
+  String serverPath = "http://192.168.43.165:3456/get-power?meter=250791377447";
   http.begin(client, serverPath.c_str());
   int httpResponseCode = http.GET();
       
@@ -102,7 +101,7 @@ void getPower() {
 }
 
 void rechargePower(int amount) {
-  String serverPath = "http://192.168.43.165:3456/new-transaction?meter=250791377446&amount="+amount;
+  String serverPath = "http://192.168.43.165:3456/new-transaction?meter=250791377447&amount="+amount;
   http.begin(client, serverPath.c_str());
   int httpResponseCode = http.GET();
       
@@ -111,9 +110,9 @@ void rechargePower(int amount) {
     Serial.println(httpResponseCode);
     String payload = http.getString();
     Serial.println(payload);
-    if(httpResponseCode === 201){
-      getPower();
-    }
+    // if(httpResponseCode === 201){
+    //   getPower();
+    // }
   }else {
     Serial.print("Error code: ");
     Serial.println(httpResponseCode);

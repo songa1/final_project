@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Energy Meter</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/modal.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <h2>SMART ENERGY METER</h2>
+            <div class="right">
+                <p>Meter No: <span id="meterNoHolder"></span></p>
+                <button class="r-btn" id="myBtn">Recharge</button>
+            </div>
+        </nav>
+        <section class="current">
+            <div class="current-power">
+                <p><span class="reading" id="powerHolder"></span> Kwh</p>
+            </div>
+            <div class="vc">
+                <p><span>Voltage:</span> 220V</p>
+                <p><span>Consumed:</span> 230Kwh</p>
+                <p><span>Current:</span> 1.2A</p>
+            </div>
+            <div class="transactions">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Power</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-body">
+
+                    </tbody>
+                </table>
+                <p id="noData" ></p>
+            </div>
+        </section>
+    </div>
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+              <span class="close">&times;</span>
+              <h2>Recharge your meter</h2>
+            </div>
+            <div class="modal-body">
+              <form>
+                <label for="amountToRecharge">
+                    Enter the amount of money:
+                </label>
+                <input type="number" placeholder="100" id="amountToRecharge">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <h3></h3>
+              <button class="r-btn" id="recharge-btn">Save</button>
+            </div>
+        </div>
+      
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
+    <script src="./js/modal.js"></script>
+    <script src="./js/apiCalls.js"></script>
+</body>
+</html>
