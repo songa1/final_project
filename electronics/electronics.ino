@@ -4,21 +4,24 @@
 #include <Grandeur.h>
 #include <LiquidCrystal_I2C.h>
 #include <SoftwareSerial.h>
+#include <ArduinoJson.h>
 
-#define rxPin 2
-#define txPin 3
-SoftwareSerial sim800L(rxPin,txPin); 
+// #define rxPin D3
+// #define txPin D4
+// SoftwareSerial sim800L(rxPin,txPin); 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-const char* ssid = "ICT_INNO_CENTER";
-const char* pass = "ictinnocenter@2021";
+DynamicJsonDocument doc(384);
+HTTPClient http;
+
+const char* ssid = "techinika";
+const char* pass = "12345678@tech";
 
 String buff;
 int amountToRecharge = 100;
 
-String apiUrl = "http://localhost:3456";
-
-const int httpPort = 80;
+#define API_HOST "http://192.168.43.165:3456"
+#define METER_NUM "250791377446"
 
 WiFiClient client;
 
@@ -31,6 +34,7 @@ void setup() {
     delay(1000);
     Serial.println("Connecting to WiFi...");
   }
+  Serial.println("Connected to WiFi");
 
   // LCD Init
   lcd.begin(16, 2);
@@ -38,84 +42,81 @@ void setup() {
   lcd.backlight();
 
   // GSM Module Init
-  sim800L.begin(115200);
+  // sim800L.begin(115200);
 
-  Serial.println("Initializing...");
+  // Serial.println("Initializing...");
 
-  sim800L.println("AT");
-  waitForResponse();
-
-  sim800L.println("ATE1");
-  waitForResponse();
-
-  sim800L.println("AT+CMGF=1");
-  waitForResponse();
-
-  sim800L.println("AT+CNMI=1,2,0,0,0");
-  waitForResponse();
+  // sim800L.println("AT");
+  // delay(1000);
+  // if (sim800L.find("OK")) {
+  //   Serial.println("GSM module is ready");
+  // } else {
+  //   Serial.println("Error initializing GSM module");
+  //   while (1);
+  // }
+  getPower();
 }
 
 void loop() {
-  
-  if(!client.connect(apiUrl, httpPort)) {
-    Serial.println("Connection to Api failed!");
-    return;
-  }
 
-  client.println("GET /get-power HTTP/1.1");
-  client.println("Host: "+apiUrl);
-  client.println("Connection: close");
-  client.println();
+  // if (sim800L.available() > 0) {
+  //   String sms = sim800L.readStringUntil('\n');
 
-  while(client.available()) {
-    char terminator = '}';
-    String line = client.readStringUntil(terminator);
-    Serial.print(line);
-  }
-  lcd.setCursor(0,0);
-  lcd.print("Hi, Achille!");
-  delay(1000);
+  //   // Check if the SMS begins with "+CMT" to identify an incoming message
+  //   if (sms.startsWith("+R")) {
 
-  lcd.setCursor(0, 1);
-  lcd.print("It's working!");
-  delay(800);
+  //     String smsContent = sim800L.readStringUntil('\n');
 
-  lcd.clear();
-
-  while(sim800L.available()){
-    buff = sim800L.readString();
-    Serial.println(buff);
-  }
-  while(Serial.available())  {
-    buff = Serial.readString();
-    buff.trim();
-    if(buff == "s")
-      send_sms();
-    else if(buff== "c")
-      make_call();
-    else
-      sim800L.println(buff);
-  }
+  //     Serial.print("SMS Content: ");
+  // rechargePower(smsContent);
+  //   }
+  // }
 }
 
-void send_sms(){
-  sim800L.print("AT+CMGS=\"+250780630465\"\r");
-  waitForResponse();
-  
-  sim800L.print("Hello from SIM800L");
-  sim800L.write(0x1A);
-  waitForResponse();
-}
+void getPower() {
+  String serverPath = "http://192.168.43.165:3456/get-power?meter=250791377446";
+  http.begin(client, serverPath.c_str());
+  int httpResponseCode = http.GET();
+      
+  if (httpResponseCode) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    String payload = http.getString();
+    Serial.println(payload);
 
-void make_call(){
-  sim800L.println("ATD+250780630465;");
-  waitForResponse();
-}
+    deserializeJson(doc, payload);
+    float powerValue = doc["data"]["power"];
+    Serial.print(F("Power Value: "));
+    Serial.println(powerValue);
+    lcd.setCursor(0,0);
+    lcd.print(String(powerValue));
 
-void waitForResponse(){
-  delay(1000);
-  while(sim800L.available()){
-    Serial.println(sim800L.readString());
+    lcd.setCursor(0, 1);
+    lcd.print("Kwh");
+    delay(800);
+  }else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
   }
-  sim800L.read();
+  http.end();
+}
+
+void rechargePower(int amount) {
+  String serverPath = "http://192.168.43.165:3456/new-transaction?meter=250791377446&amount="+amount;
+  http.begin(client, serverPath.c_str());
+  int httpResponseCode = http.GET();
+      
+  if (httpResponseCode) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    String payload = http.getString();
+    Serial.println(payload);
+    if(httpResponseCode === 201){
+      getPower();
+    }
+  }else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+  }
+  http.end();
 }

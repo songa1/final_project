@@ -4,7 +4,8 @@ const prisma = new PrismaClient();
 export const addMeter = async (req, res) => {
   let meter = await prisma.meter.create({
     data: {
-      id: req.body.meter,
+      meterNumber: req.body.meterNumber,
+      power: req.body.power
     },
   });
 
