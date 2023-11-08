@@ -168,6 +168,7 @@ form label {
     align-items: start;
     height: 100vh;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .homepage {

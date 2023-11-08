@@ -24,7 +24,7 @@ export const reducePower = async (req, res) => {
   if(powerUsed > meter.power){
     newPower = 0;
   } else {
-    newPower = meter.power - Number(powerUsed);
+    newPower = (meter.power) - Number(powerUsed);
     if(newPower < 0) {
       newPower = 0;
     }
