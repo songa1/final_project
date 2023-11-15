@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import sendSMS from "./sms.js";
 const prisma = new PrismaClient();
 
 export const getPower = async (req, res) => {
@@ -30,14 +31,19 @@ export const reducePower = async (req, res) => {
     }
   }
   try {
+
     let newP = await prisma.meter.update({
       where: {
         id: meter.id
       },
       data: {
-        power: newPower
+        power: parseFloat((newPower).toFixed(2))
       }
     })
+    
+    if(newPower === 0 && meter.power !== 0){
+      await sendSMS(meterNumber, `Your are out of energy credits. Recharge to be able to use electricity again. Use Web platform or USSD app to recharge.`);
+    }
 
     res.status(201).send({ message: 'Power updated successfully!', status: 201, data: newP })
   }catch (error) {

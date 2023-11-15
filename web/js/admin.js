@@ -54,7 +54,6 @@ const addMeter = async (meterNumber, password) => {
         const data = await res.json();
         console.log(data);
         if(data.status === 201){
-            
             alert("Successfully added new meter!");
             window.location.reload();
         }else{

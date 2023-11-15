@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import sendSMS from "./sms.js";
 const prisma = new PrismaClient();
 
 export const addTransaction = async (req, res) => {
@@ -22,14 +23,16 @@ export const addTransaction = async (req, res) => {
   });
 
   if(transaction){
-    await prisma.meter.update({
+    let newPower = (Number(power) + Number(meterData.power)).toFixed(2);
+    let upData = await prisma.meter.update({
       where: {
         meterNumber: meter,
       },
       data: {
-        power: Number(power) + Number(meterData.power),
+        power: parseFloat(newPower)
       },
     });
+    await sendSMS(meter, `Your recharge is successful. You have been given ${power} Kwh. Your new balance is ${upData.power} Kwh.`);
   }
 
   res

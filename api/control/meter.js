@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import sendSMS from "./sms.js";
 const prisma = new PrismaClient();
 
 export const addMeter = async (req, res) => {
@@ -10,7 +11,11 @@ export const addMeter = async (req, res) => {
     },
   });
 
-  res.status(201).send({ status: 201, message: "Meter added successfully" });
+  if(meter){
+    await sendSMS(meter.meterNumber, `Your meter has been created successfully!
+    Meter number is ${meter.meterNumber}`);
+    res.status(201).send({ status: 201, message: "Meter added successfully" });
+  } 
 };
 
 export const getMeters = async(req, res) => {

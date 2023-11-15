@@ -15,10 +15,10 @@ const int cSensorIn = A0;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 DynamicJsonDocument doc(384);
 HTTPClient http;
-const char* ssid = "Pixel_6191";
-const char* pass = "grace@123.";
-#define API_HOST "http://192.168.43.165:3456"
-#define METER_NUM "250791377447"
+const char* ssid = "TECNO SPARK 5 Pro";
+const char* pass = "1290607553iaf";
+#define API_HOST "http://192.168.43.233:3456"
+#define METER_NUM "BICE-1234567890"
 WiFiClient client;
 const int httpTimeout = 15000;
 int mVperAmp = 185; 
